@@ -27,66 +27,8 @@ The **Gondor Ecosystem** is a functional prototype of a hybrid **Web2/Web3** arc
 
 ## Architecture at a Glance
 
-```mermaid
-graph TD
-    subgraph Frontend [Presentation Layer]
-        App[Mobile App<br>React Native]
-        Portal[Audit Web Portal<br>React]
-    end
+<img width="1335" height="580" alt="image" src="https://github.com/user-attachments/assets/7e81facb-6ce3-4704-bafa-7ba38cebb8b8" />
 
-    subgraph Backend [Gondor Go Modular Monolith]
-        subgraph MT [Minas Tirith - Web2 Core]
-            API[REST API]
-            TS[TransactionService]
-            SS[StockService]
-            AS[AuthService]
-        end
-
-        subgraph PEL [Pelargir - Web3 Coprocessor]
-            RS[RegisterService]
-            BATCH[TransactionBatcher]
-            ZK[ReputationUpdater<br>ZK-SNARKs]
-            CRON[HeartbeatCron]
-        end
-
-        API --> TS
-        API --> AS
-        API --> SS
-
-        TS -. "IdentityBridge" .-> RS
-        TS -. "TransactionReceipt" .-> BATCH
-        BATCH --> ZK
-        CRON --> ZK
-    end
-
-    subgraph Persistence [Data Infrastructure]
-        MySQL[(MySQL<br>Transactional ACID)]
-        Redis[(Redis<br>High-Speed Cache µs)]
-    end
-
-    subgraph External [External Integrations]
-        ExtAPI[Price Providers<br>Finnhub / Alpaca]
-        Polygon[Blockchain Network<br>Polygon Amoy]
-        SC{Smart Contract<br>GondorSovereignIdentity}
-    end
-
-    App -->|HTTP| API
-    App -->|RPC| Polygon
-    Portal -->|RPC| Polygon
-
-    SS <--> Redis
-    SS <--> ExtAPI
-
-    TS <--> MySQL
-    AS <--> MySQL
-    BATCH <--> MySQL
-
-    RS -->|Mint SBT| SC
-    BATCH -->|Anchor Root| SC
-    ZK -->|Verify Proof| SC
-
-    Polygon --- SC
-```
 
 | Component | Module | Role |
 |---|---|---|
